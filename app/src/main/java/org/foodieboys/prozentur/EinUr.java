@@ -3,8 +3,12 @@ package org.foodieboys.prozentur;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
+import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Implementation of App Widget functionality.
@@ -34,12 +38,18 @@ public class EinUr extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ein_ur);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        Calendar calendar = new GregorianCalendar();
+        Date trialTime = new Date();
+        calendar.setTime(trialTime);
+        long daySeconds = calendar.get(Calendar.HOUR_OF_DAY) * 3600000 + calendar.get(Calendar.MINUTE) * 60000 + calendar.get(Calendar.SECOND) * 1000 + calendar.get(Calendar.MILLISECOND);
+        double percent = daySeconds / 864000.0;
 
-        // Instruct the widget manager to update the widget
+        Log.i("Ur", "jetzt");
+
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ein_ur);
+        views.setTextViewText(R.id.appwidget_text, String.format("%5.2f%%", percent));
+
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }
