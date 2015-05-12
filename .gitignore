@@ -5,5 +5,5 @@
 .DS_Store
 /build
 /captures
-key.jks
+*.jks
 *.apk
