@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/prozentur.iml" filepath="$PROJECT_DIR$/prozentur.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zentuhr.iml" filepath="$PROJECT_DIR$/zentuhr.iml" />
     </modules>
   </component>
 </project>

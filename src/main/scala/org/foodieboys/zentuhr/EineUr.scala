@@ -1,4 +1,4 @@
-package org.foodieboys.prozentur
+package org.foodieboys.zentuhr
 
 import java.util.{Calendar, Date, GregorianCalendar}
 
