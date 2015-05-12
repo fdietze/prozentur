@@ -8,7 +8,7 @@ import android.util.Log
 import android.widget.RemoteViews
 
 
-class EineUr extends AppWidgetProvider {
+class ProzentWidget extends AppWidgetProvider {
 
   override def onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: Array[Int]) {
     // There may be multiple widgets active, so update all of them
@@ -40,7 +40,7 @@ class EineUr extends AppWidgetProvider {
     Log.i("Ur", "jetzt")
 
 
-    val views = new RemoteViews(context.getPackageName, R.layout.eine_ur)
+    val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)
     views.setTextViewText(R.id.appwidget_text, "%5.2f%%" format percent)
 
     appWidgetManager.updateAppWidget(appWidgetId, views)
