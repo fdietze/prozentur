@@ -21,29 +21,25 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        targetSdkVersion 22
+        minSdkVersion 10
+        targetSdkVersion 16
         versionCode 4
         versionName "0.1"
-        multiDexEnabled true
     }
 
-    dexOptions {
-        preDexLibraries false
-        javaMaxHeapSize "2g"
-    }
-
-    productFlavors {
-        dev {
-            minSdkVersion 21 // To reduce compilation time
+    buildTypes {
+        debug {
+            minifyEnabled true
+            proguardFile file("proguard-rules.txt")
         }
 
-        prod {
-            minSdkVersion 8
+        release {
+            minifyEnabled true
+            proguardFile file("proguard-rules.txt")
         }
     }
 }
 
 dependencies {
     compile "org.scala-lang:scala-library:2.11.7"
-    compile "com.android.support:multidex:1.0.1"
 }
