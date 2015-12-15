@@ -3,8 +3,8 @@
     android:initialKeyguardLayout="@layout/prozent_widget"
     android:initialLayout="@layout/prozent_widget"
     android:minHeight="40dp"
-    android:minWidth="180dp"
+    android:minWidth="40dp"
     android:previewImage="@drawable/zentuhr_pro_ori_portrait"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="900000"
+    android:updatePeriodMillis="180000"
     android:widgetCategory="home_screen|keyguard"></appwidget-provider>

@@ -2,11 +2,18 @@ package org.foodieboys.zentuhr
 
 import java.util.{TimerTask, Timer}
 
-class Scheduler(delay: Long, period: Long) {
+class Scheduler(delay: Long, private var period: Long) {
   private var timer: Option[Timer] = None
   private var timerTask: Option[TimerTask] = None
+  private var task: () => Unit = _
 
-  def start(task: () => Unit): Unit = {
+  def setPeriod (newPeriod: Long): Unit = {
+    period = newPeriod
+    start(task)
+  }
+
+  def start(newTask: () => Unit): Unit = {
+    task = newTask
     stop()
     timer = Some(new Timer())
     timerTask = Some(new TimerTask {def run() { task() }})
