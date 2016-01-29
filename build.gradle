@@ -19,14 +19,12 @@ apply plugin: "jp.leafytree.android-scala"
 android {
     compileSdkVersion "android-22"
     buildToolsVersion "22.0.1"
-
     defaultConfig {
         minSdkVersion 10
         targetSdkVersion 16
         versionCode 4
         versionName "0.1"
     }
-
     buildTypes {
         debug {
             minifyEnabled true
@@ -38,8 +36,11 @@ android {
             proguardFile file("proguard-rules.txt")
         }
     }
+    productFlavors {
+    }
 }
 
 dependencies {
-    compile "org.scala-lang:scala-library:2.11.7"
+    compile 'org.scala-lang:scala-library:2.11.7'
+    compile 'com.android.support:appcompat-v7:22.2.1'
 }

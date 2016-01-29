@@ -1,6 +1,9 @@
 package org.foodieboys.zentuhr
 
 import java.util.{GregorianCalendar, Date, Calendar}
+import android.app.PendingIntent
+import android.net.Uri
+
 import collection.mutable
 
 import android.appwidget.{AppWidgetManager, AppWidgetProvider}
@@ -10,7 +13,7 @@ import android.util.Log
 import android.widget.RemoteViews
 
 object ProzentWidget {
-  //  val TOUCH_WIDGET = "TouchWidget"
+  val TOUCH_WIDGET = "TouchWidget"
   val schedulers = new mutable.HashMap[Int, Scheduler]()
   val settings = mutable.HashMap[Int,Int]()
   val sizeToDecimal = Map(429 -> 3, 318 -> 3, 206 -> 2, 95 -> 0)
@@ -28,7 +31,10 @@ class ProzentWidget extends AppWidgetProvider {
     import Intent._
     Log.i("Ur", "receive: " + intent.getAction)
     intent.getAction match {
-      //      case TOUCH_WIDGET =>
+            case TOUCH_WIDGET =>
+            val i = new Intent(context, classOf[WidgetPreferences])
+            context.startActivity(i)
+Log.i("Ur", "bleib logger")
       //        val widgetId = intent.getData().getLastPathSegment.toInt
       //        updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId)
       case _ =>
@@ -57,21 +63,21 @@ class ProzentWidget extends AppWidgetProvider {
     Log.i("Ur", s"onPudate ${appWidgetIds.toList}")
 
 
-    //      def registerWidgetTouch(id: Int) = {
-    //      val intent = new Intent(context, classOf[ProzentWidget])
-    //      intent.setAction(TOUCH_WIDGET)
-    //      intent.setData(Uri.parse(s"zentuhr://widgets/$id"))
-    //
-    //      val pendingIntent = PendingIntent.getBroadcast(context, 0 , intent, 0)
-    //      val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)
-    //      views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
-    //      appWidgetManager.updateAppWidget(id, views)
-    //    }
-    //
-    //    // register touch events for all widgets
-    //    for (id <- appWidgetIds) {
-    //      registerWidgetTouch(id)
-    //    }
+          def registerWidgetTouch(id: Int) = {
+          val intent = new Intent(context, classOf[ProzentWidget])
+          intent.setAction(TOUCH_WIDGET)
+          intent.setData(Uri.parse(s"zentuhr://widgets/$id"))
+
+          val pendingIntent = PendingIntent.getBroadcast(context, 0 , intent, 0)
+          val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)
+          views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
+          appWidgetManager.updateAppWidget(id, views)
+        }
+
+        // register touch events for all widgets
+        for (id <- appWidgetIds) {
+          registerWidgetTouch(id)
+        }
 
     for(id <- appWidgetIds) {
       if(!schedulers.isDefinedAt(id))
@@ -130,7 +136,7 @@ class ProzentWidget extends AppWidgetProvider {
       calendar.get(Calendar.MILLISECOND)
 
     val percent = daySeconds / 864000.0
-    val decimal = sizeToDecimal(settings.getOrElse(appWidgetId, 95))
+    val decimal = sizeToDecimal.getOrElse(settings.getOrElse(appWidgetId, 95),4)
     val formatString = s"%${3 + decimal}.${decimal}f%%"
 
     val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)
