@@ -17,13 +17,10 @@
                     android:resource="@xml/prozent_widget_info"/>
         </receiver>
 
-        <activity android:name=".Settings">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+        <activity android:name=".WidgetPreferences">
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
-    </application>
 
+    </application>
+    <!-- irgendn kack - Ende -->
 </manifest>

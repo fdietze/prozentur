@@ -1,16 +1,17 @@
 package org.foodieboys.zentuhr
 
-import java.util.{GregorianCalendar, Date, Calendar}
+import java.util.{Calendar, Date, GregorianCalendar}
+
 import android.app.PendingIntent
-import android.net.Uri
-
-import collection.mutable
-
 import android.appwidget.{AppWidgetManager, AppWidgetProvider}
 import android.content._
+import android.net.Uri
 import android.os.{Bundle, PowerManager}
+import android.preference.PreferenceManager
 import android.util.Log
 import android.widget.RemoteViews
+
+import scala.collection.mutable
 
 object ProzentWidget {
   val TOUCH_WIDGET = "TouchWidget"
@@ -31,10 +32,11 @@ class ProzentWidget extends AppWidgetProvider {
     import Intent._
     Log.i("Ur", "receive: " + intent.getAction)
     intent.getAction match {
-            case TOUCH_WIDGET =>
-            val i = new Intent(context, classOf[WidgetPreferences])
-            context.startActivity(i)
-Log.i("Ur", "bleib logger")
+      case TOUCH_WIDGET =>
+        val i = new Intent(context, classOf[WidgetPreferences])
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(i)
+        Log.i("Ur", "bleib logger")
       //        val widgetId = intent.getData().getLastPathSegment.toInt
       //        updateAppWidget(context, AppWidgetManager.getInstance(context), widgetId)
       case _ =>
@@ -63,26 +65,31 @@ Log.i("Ur", "bleib logger")
     Log.i("Ur", s"onPudate ${appWidgetIds.toList}")
 
 
-          def registerWidgetTouch(id: Int) = {
-          val intent = new Intent(context, classOf[ProzentWidget])
-          intent.setAction(TOUCH_WIDGET)
-          intent.setData(Uri.parse(s"zentuhr://widgets/$id"))
 
-          val pendingIntent = PendingIntent.getBroadcast(context, 0 , intent, 0)
-          val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)
-          views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
-          appWidgetManager.updateAppWidget(id, views)
-        }
+    def registerWidgetTouch(id: Int) = {
+      val intent = new Intent(context, classOf[ProzentWidget])
+      intent.setAction(TOUCH_WIDGET)
+      intent.setData(Uri.parse(s"zentuhr://widgets/$id"))
 
-        // register touch events for all widgets
-        for (id <- appWidgetIds) {
-          registerWidgetTouch(id)
-        }
+      val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+      val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)
+      views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent)
+      appWidgetManager.updateAppWidget(id, views)
+    }
+
+    // register touch events for all widgets
+    for(id <- appWidgetIds) {
+      registerWidgetTouch(id)
+    }
 
     for(id <- appWidgetIds) {
       if(!schedulers.isDefinedAt(id))
         schedulers(id) = new Scheduler(0, 864)
       schedulers(id).start(() => updateAppWidget(context, appWidgetManager, id))
+      val pref = PreferenceManager.getDefaultSharedPreferences(context)
+      val decimals = pref.getString("decimals", "2").toInt
+      Log.i("Ur", s"on set $decimals")
+      settings(id) = decimals
     }
 
     updateAllAppWidgets(context)
@@ -98,7 +105,6 @@ Log.i("Ur", "bleib logger")
 
   override def onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle): Unit = {
     Log.i("Ur", s"Size is now: ${newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)}")
-    widthToSettings(appWidgetManager, appWidgetId)
     updateAppWidget(context, appWidgetManager, appWidgetId)
   }
 
@@ -113,19 +119,14 @@ Log.i("Ur", "bleib logger")
     val wIds = appWidgetManager.getAppWidgetIds(new ComponentName(context.getPackageName, classOf[ProzentWidget].getName))
     // Log.i("Ur", "wIds" + wIds.toList)
     for(id <- wIds) {
-      widthToSettings(appWidgetManager, id)
       updateAppWidget(context, appWidgetManager, id)
     }
   }
 
-  def widthToSettings(appWidgetManager: AppWidgetManager, id: Int): Unit = {
-    val options = appWidgetManager.getAppWidgetOptions(id)
-    val width = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH)
-    settings(id) = width
-  }
 
   def updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
     Log.i("Ur", s"groovy, Widget $appWidgetId wurde erneuert")
+
 
     val calendar = new GregorianCalendar()
     calendar.setTime(new Date())
@@ -136,7 +137,7 @@ Log.i("Ur", "bleib logger")
       calendar.get(Calendar.MILLISECOND)
 
     val percent = daySeconds / 864000.0
-    val decimal = sizeToDecimal.getOrElse(settings.getOrElse(appWidgetId, 95),4)
+    val decimal = settings.getOrElse(appWidgetId, 0)
     val formatString = s"%${3 + decimal}.${decimal}f%%"
 
     val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)

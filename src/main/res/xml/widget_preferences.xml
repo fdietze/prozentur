@@ -3,7 +3,13 @@
 
     <CheckBoxPreference android:key="penos"
         android:title="Penos Option"
-        android:summary="Deine Mutter hat nen Penos!" />
+        android:summary="Deine Mutter ist ein Penozeros!" />
 
+    <ListPreference android:key="decimals"
+        android:title="Dezimalstellen"
+        android:summary="Lege Anzahl der Nachkommastellen fest."
+        android:entries="@array/decimalpoints_name"
+        android:entryValues="@array/decimalpoints_value"
+    />
 
 </PreferenceScreen>
