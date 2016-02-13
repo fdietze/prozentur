@@ -130,7 +130,7 @@ class ProzentWidget extends AppWidgetProvider {
       calendar.get(Calendar.MILLISECOND)
 
     val percent = daySeconds / 864000.0
-    val decimal = sizeToDecimal(settings.getOrElse(appWidgetId, 95))
+    val decimal = sizeToDecimal.getOrElse(settings.getOrElse(appWidgetId, 95), 3)
     val formatString = s"%${3 + decimal}.${decimal}f%%"
 
     val views = new RemoteViews(context.getPackageName, R.layout.prozent_widget)

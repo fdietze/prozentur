@@ -17,8 +17,8 @@ apply plugin: "com.android.application"
 apply plugin: "jp.leafytree.android-scala"
 
 android {
-    compileSdkVersion "android-22"
-    buildToolsVersion "22.0.1"
+    compileSdkVersion "android-23"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         minSdkVersion 10
