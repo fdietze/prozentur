@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Zentuhr Pro</string>
+    <string name="app_name">A Zentuhr Pro</string>
     <string name="appwidget_text">100%</string>
     <string name="add_widget">Add widget</string>
 
