@@ -1,14 +1,29 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin"
+<RelativeLayout android:id="@+id/widget_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#343434"
     android:clickable="true"
-    android:id="@+id/widget_layout">
+    android:padding="@dimen/widget_margin">
 
-    <TextView android:id="@+id/appwidget_text" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" android:text="@string/appwidget_text"
-        android:textColor="#ffffff" android:textSize="44sp"
-        android:layout_margin="8dp" android:contentDescription="@string/appwidget_text" />
+    <com.lb.auto_fit_textview.AutoResizeTextView
+        android:id="@+id/appwidget_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="false"
+        android:layout_centerInParent="true"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:text="uzlee"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+
+    <!--<TextView android:id="@+id/appwidget_text" android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content" android:layout_centerHorizontal="true"-->
+    <!--android:layout_centerVertical="true" android:text="@string/appwidget_text"-->
+    <!--android:textColor="#ffffff" android:textSize="44sp"-->
+    <!--android:layout_margin="8dp" android:contentDescription="@string/appwidget_text" />-->
 
 </RelativeLayout>
